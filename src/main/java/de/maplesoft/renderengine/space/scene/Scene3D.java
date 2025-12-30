@@ -4,15 +4,16 @@ import de.maplesoft.renderengine.renderobject.gameobject.GameObject;
 import de.maplesoft.renderengine.space.grid.Grid3D;
 import de.maplesoft.renderengine.space.space3d.Vector3;
 
-import java.util.Set;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Scene3D extends Scene<Vector3> {
 
-    public Scene3D(Set<GameObject<Vector3>> gameObjects) {
+    public Scene3D(Map<String, GameObject<Vector3>> gameObjects) {
         super(new Grid3D(), gameObjects);
     }
 
     public Scene3D() {
-        this(Set.of());
+        this(new HashMap<>());
     }
 }

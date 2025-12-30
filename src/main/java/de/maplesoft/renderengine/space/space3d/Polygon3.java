@@ -30,8 +30,7 @@ public class Polygon3 implements Polygon<Vector3> {
             vertex.add(vector);
     }
 
-
-    public Polygon3(Vector3[] vertices) {
+    public Polygon3(Vector3... vertices) {
         this.vertices = vertices;
     }
 }

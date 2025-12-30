@@ -2,6 +2,7 @@ package de.maplesoft.renderengine.renderobject.gameobject;
 
 import de.maplesoft.renderengine.exception.InvalidComponentException;
 import de.maplesoft.renderengine.renderobject.gameobject.component.Component;
+import de.maplesoft.renderengine.renderobject.gameobject.component.Components;
 import de.maplesoft.renderengine.renderobject.gamescript.GameScript;
 import de.maplesoft.renderengine.space.polygon.Polygons;
 import lombok.Getter;
@@ -10,16 +11,12 @@ import lombok.Setter;
 import java.util.TreeSet;
 
 public abstract class GameObject<V> {
-    @Getter
-    protected final Polygons<V> polygons;
-
     @Getter @Setter
     protected String name;
 
     @Getter
-    protected final TreeSet<Component> components;
-    protected GameObject(Polygons<V> polygons, TreeSet<Component> components, String name) {
-        this.polygons = polygons;
+    protected final Components components;
+    protected GameObject(Components components, String name) {
         this.components = components;
         this.name = name;
     }

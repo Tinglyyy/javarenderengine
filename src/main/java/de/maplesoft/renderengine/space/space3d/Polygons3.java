@@ -45,8 +45,8 @@ public class Polygons3 extends Polygons<Vector3> {
         return VectorUtils.average(vertices.toArray(new Vector3[0]));
     }
 
-    @org.jetbrains.annotations.Contract("_ -> new")
-    public static @NonNull Polygons3 of(Polygon3... polygons) {
-        return new Polygons3(List.of(polygons));
-    }
+//    @org.jetbrains.annotations.Contract("_ -> new")
+//    public static @NonNull Polygons3 of(Polygon3... polygons) {
+//        return new Polygons3(List.of(polygons));
+//    }
 }

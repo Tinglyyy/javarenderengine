@@ -17,4 +17,9 @@ public final class Mesh2D implements Component {
     public void scale(double scalar) {
 
     }
+
+    @Override
+    public int getRanking() {
+        return 1;
+    }
 }

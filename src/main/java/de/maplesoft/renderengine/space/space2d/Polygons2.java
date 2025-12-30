@@ -5,9 +5,14 @@ import de.maplesoft.renderengine.space.polygon.Polygons;
 import de.maplesoft.renderengine.space.util.VectorUtils;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 public class Polygons2 extends Polygons<Vector2> {
+
+    public Polygons2(Collection<Polygon2> polygons) {
+        super(polygons);
+    }
 
     @Override
     public void scale(double scalar) {

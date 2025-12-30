@@ -1,5 +1,6 @@
 package de.maplesoft.renderengine.renderobject.sceneobject.defaults.cameras;
 
+import de.maplesoft.renderengine.exception.InvalidComponentException;
 import de.maplesoft.renderengine.renderobject.gameobject.GameObject;
 import de.maplesoft.renderengine.renderobject.gameobject.component.impl.Mesh3D;
 import de.maplesoft.renderengine.renderobject.gameobject.component.impl.Transform3D;
@@ -14,10 +15,7 @@ import de.maplesoft.renderengine.space.space3d.Vector3;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * A 3D camera working with the path tracer concept:
@@ -42,7 +40,7 @@ public class PathTracerCamera3D extends SceneObject implements Camera<Vector3> {
 
     private double currentDistance = 0;
 
-    private Set<GameObject<Vector3>> loadable = null;
+    private Collection<GameObject<Vector3>> loadable = null;
 
     public PathTracerCamera3D() {
         this(Vector3.zero(), 10, 100, 1);
@@ -96,7 +94,7 @@ public class PathTracerCamera3D extends SceneObject implements Camera<Vector3> {
 
         this.currentDistance = 0;
 
-        this.loadable = scene.getGameObjects();
+        this.loadable = scene.getGameObjects().values();
 
         Vector3 step = this.pathVector.clone().normalize().multiply(this.stepDistance);
 
@@ -120,7 +118,15 @@ public class PathTracerCamera3D extends SceneObject implements Camera<Vector3> {
         for(GameObject<Vector3> gameObject : this.loadable) {
             Polygons<Vector3> polygons = new Polygons3();
 
-            for(Polygon<Vector3> polygon : gameObject.getPolygons()) {
+            Mesh3D mesh;
+
+            try {
+                mesh = gameObject.getComponent(Mesh3D.class);
+            } catch (InvalidComponentException ignored) {
+                continue;
+            }
+
+            for(Polygon<Vector3> polygon : mesh.getPolygons()) {
                 Polygon<Vector3> onScreen = this.getOnScreen(polygon);
 
                 if(onScreen != null)

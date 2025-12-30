@@ -1,7 +1,7 @@
 package de.maplesoft.renderengine.rendergeo.shape;
 
 import de.maplesoft.renderengine.rendergeo.RVector2;
-import de.maplesoft.renderengine.exception.InvalidShapeException;
+import de.maplesoft.renderengine.exception.geo.InvalidShapeException;
 import de.maplesoft.renderengine.rendergeo.shape.impl.RTrig;
 import lombok.Getter;
 import lombok.Setter;

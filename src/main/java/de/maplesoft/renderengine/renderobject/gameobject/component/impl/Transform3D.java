@@ -1,7 +1,10 @@
 package de.maplesoft.renderengine.renderobject.gameobject.component.impl;
 
 import de.maplesoft.renderengine.renderobject.gameobject.component.Component;
+import de.maplesoft.renderengine.space.space3d.Rot3;
 import de.maplesoft.renderengine.space.space3d.Vector3;
+import de.maplesoft.renderengine.space.util.MathUtils;
+import de.maplesoft.renderengine.space.util.VectorUtils;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -13,12 +16,16 @@ public final class Transform3D implements Component {
      */
 
     @Getter @Setter
-    private Vector3 rotation, scale, anchor, position;
+    private Vector3 scale, anchor, position;
 
+    @Getter @Setter
+    private Rot3 rotation;
 
-    private Vector3 _IRotation, _IScale, _IAnchor, _IPosition;
+    private Vector3 _IScale, _IAnchor, _IPosition;
 
-    public Transform3D(Vector3 rotation, Vector3 scale, Vector3 anchor, Vector3 position) {
+    private Rot3 _IRotation;
+
+    public Transform3D(Rot3 rotation, Vector3 scale, Vector3 anchor, Vector3 position) {
         this.rotation = rotation;
         this._IRotation = rotation.clone();
 
@@ -33,7 +40,7 @@ public final class Transform3D implements Component {
     }
 
     public static Transform3D origin() {
-        return new Transform3D(Vector3.zero(), new Vector3(1, 1, 1), Vector3.zero(), Vector3.zero());
+        return new Transform3D(Rot3.zero(), new Vector3(1, 1, 1), Vector3.zero(), Vector3.zero());
     }
 
     public void translateX(double x) {
@@ -53,20 +60,20 @@ public final class Transform3D implements Component {
     }
 
 
-    public void rotateX(double x) {
-        this.rotation.addX(x);
+    public void rotateX(double alpha) {
+        this.rotation.addAlpha(alpha);
     }
 
-    public void rotateY(double y) {
-        this.rotation.addY(y);
+    public void rotateY(double beta) {
+        this.rotation.addBeta(beta);
     }
 
-    public void rotateZ(double z) {
-        this.rotation.addZ(z);
+    public void rotateZ(double gamma) {
+        this.rotation.addGamma(gamma);
     }
 
-    public void rotate(Vector3 vector) {
-        this.rotation.add(vector);
+    public void rotate(Rot3 rotation) {
+        this.rotation.add(rotation);
     }
 
     @Override
@@ -95,11 +102,22 @@ public final class Transform3D implements Component {
     }
 
     @Override
+    public int getRanking() {
+        return 0;
+    }
+
+    @Override
     public void reload() {
         this.position = _IPosition.clone();
         this.rotation = _IRotation.clone();
         this.scale = _IScale.clone();
         this.anchor = _IAnchor.clone();
 
+    }
+
+    public static Transform3D ofVectors(Vector3... vectors) {
+        Vector3 location = VectorUtils.average(vectors);
+
+        return new Transform3D(Rot3.zero(), new Vector3(1, 1, 1), location, location);
     }
 }

@@ -1,4 +1,4 @@
-package de.maplesoft.renderengine.exception;
+package de.maplesoft.renderengine.exception.geo;
 
 import de.maplesoft.renderengine.rendergeo.shape.RenderShape;
 

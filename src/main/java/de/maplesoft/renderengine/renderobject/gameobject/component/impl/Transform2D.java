@@ -1,9 +1,11 @@
 package de.maplesoft.renderengine.renderobject.gameobject.component.impl;
 
+import de.maplesoft.renderengine.renderobject.gameobject.GameObject;
 import de.maplesoft.renderengine.renderobject.gameobject.component.Component;
 import de.maplesoft.renderengine.space.space2d.Vector2;
 import lombok.Getter;
 import lombok.Setter;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
@@ -13,13 +15,14 @@ public final class Transform2D implements Component {
     /**
      * Attributes of 2d Transform; _I- versions are initial fields for reloading
      */
+    private GameObject<Vector2> parent;
 
     private Vector2 rotation, _IRotation;
     private Vector2 scale, _IScale;
     private Vector2 anchor, _IAnchor;
     private Vector2 position, _IPosition;
 
-    public Transform2D(Vector2 rotation, Vector2 scale, Vector2 anchor, Vector2 position) {
+    public Transform2D(GameObject<Vector2> parent, Vector2 rotation, Vector2 scale, Vector2 anchor, Vector2 position) {
         this.rotation = rotation;
         this._IRotation = rotation.clone();
 
@@ -33,8 +36,8 @@ public final class Transform2D implements Component {
         this._IPosition = position.clone();
     }
 
-    public static Transform2D origin() {
-        return new Transform2D(Vector2.zero(), new Vector2(1, 1), Vector2.zero(), Vector2.zero());
+    public static Transform2D origin(GameObject<Vector2> parent) {
+        return new Transform2D(parent, Vector2.zero(), new Vector2(1, 1), Vector2.zero(), Vector2.zero());
     }
 
     public void moveX(double x) {
@@ -68,10 +71,17 @@ public final class Transform2D implements Component {
     @Override
     public Transform2D clone() {
         return new Transform2D(
+                this.parent,
                 this.rotation.clone(),
                 this.scale.clone(),
                 this.anchor.clone(),
                 this.position.clone());
+    }
+
+
+    @Override
+    public int getRanking() {
+        return 0;
     }
 
     @Override
@@ -81,5 +91,10 @@ public final class Transform2D implements Component {
         this.scale = _IScale.clone();
         this.anchor = _IAnchor.clone();
 
+    }
+
+    @Override
+    public void tick() {
+        Component.super.tick();
     }
 }

@@ -27,4 +27,9 @@ public final class Mesh3D implements Component {
                 Polygons3.of(new Point3D(location))
         );
     }
+
+    @Override
+    public int getRanking() {
+        return 1;
+    }
 }

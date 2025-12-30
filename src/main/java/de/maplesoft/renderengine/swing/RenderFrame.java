@@ -2,11 +2,10 @@ package de.maplesoft.renderengine.swing;
 
 import de.maplesoft.renderengine.annotation.CoreOperation;
 import de.maplesoft.renderengine.rendergeo.shape.RenderShape;
-import de.maplesoft.renderengine.renderobject.gameobject.GameObject;
 import de.maplesoft.renderengine.rendergeo.shape.impl.RTrig;
 import de.maplesoft.renderengine.rendergeo.shape.trigshape.Trigshape;
-import de.maplesoft.renderengine.space.scene.Scene3D;
-import lombok.Getter;
+import de.maplesoft.renderengine.renderobject.gameobject.GameObject;
+import de.maplesoft.renderengine.space.scene.Scene;
 import lombok.Setter;
 
 import javax.swing.*;
@@ -15,15 +14,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-@Getter
-public class RenderFrame extends JFrame {
+public class RenderFrame<V> extends JFrame {
     private final List<RenderShape> renderList;
 
     private final Thread tickThread, frameThread;
 
     private final AtomicBoolean clearNextFrame = new AtomicBoolean();
 
-    private Scene3D currentScene3D;
+    private Scene<V> currentScene;
 
     @Setter
     private int framespeed = 50;
@@ -31,7 +29,7 @@ public class RenderFrame extends JFrame {
     @Setter
     private int tickspeed = 20;
 
-    public RenderFrame(Scene3D scene3D){
+    public RenderFrame(Scene<V> scene){
         setSize(1020,1000);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
@@ -41,15 +39,15 @@ public class RenderFrame extends JFrame {
         this.tickThread = new Thread(this::tick);
         this.frameThread = new Thread(this::frame);
 
-        this.currentScene3D = scene3D;
+        this.currentScene = scene;
     }
 
     public RenderFrame() {
         this(null);
     }
 
-    public void loadScene(Scene3D scene3D) {
-        this.currentScene3D = scene3D;
+    public void loadScene(Scene<V> scene) {
+        this.currentScene = scene;
         this.setVisible(true);
     }
 
@@ -57,7 +55,7 @@ public class RenderFrame extends JFrame {
     public void setVisible(boolean visible) {
         super.setVisible(visible);
 
-        if(visible && this.currentScene3D != null) {
+        if(visible && this.currentScene != null) {
             this.tickThread.start();
             this.frameThread.start();
         }
@@ -80,12 +78,12 @@ public class RenderFrame extends JFrame {
     }
 
     public void tick() {
-        while(this.isVisible() && this.currentScene3D != null) {
-            for(GameObject gameObject : currentScene3D.getGameObjects())
+        while(this.isVisible() && this.currentScene != null) {
+            for(GameObject<V> gameObject : this.currentScene.getGameObjects().values())
                 gameObject.tickComponents();
 
             try {
-                Thread.sleep(tickspeed);
+                Thread.sleep(this.tickspeed);
             } catch (InterruptedException ex) {
                 ex.printStackTrace();
             }
@@ -93,10 +91,10 @@ public class RenderFrame extends JFrame {
     }
 
     public void frame() {
-        while(this.isVisible() && this.currentScene3D != null) {
+        while(this.isVisible() && this.currentScene != null) {
             this.clearNextFrame.set(!this.clearNextFrame.get());
 
-            for(GameObject gameObject : currentScene3D.getGameObjects())
+            for(GameObject<V> gameObject : currentScene.getGameObjects().values())
                 gameObject.frameUpdateScripts();
 
             try {
@@ -119,10 +117,5 @@ public class RenderFrame extends JFrame {
 
         for(RenderShape renderShape : renderList)
             g.drawPolygon(renderShape.toSwingPolygon());
-
-
-//        g.drawOval(40, 40, 60, 60); //FOR CIRCLE
-//        g.drawRect(80, 30, 200, 200); // FOR SQUARE
-//        g.drawRect(200, 100, 100, 200); // FOR RECT
     }
 }

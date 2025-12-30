@@ -112,4 +112,9 @@ public class Rot3 {
     public static Rot3 zero() {
         return new Rot3(0, 0, 0);
     }
+
+    @Override
+    public Rot3 clone() {
+        return new Rot3(this.alpha, this.beta, this.gamma);
+    }
 }
