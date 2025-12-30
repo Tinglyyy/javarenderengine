@@ -1,9 +1,9 @@
 package de.maplesoft.renderengine;
 
 
-import de.maplesoft.renderengine.object.gameobject.GameObject;
-import de.maplesoft.renderengine.object.gameobject.defaults.FaceObject;
-import de.maplesoft.renderengine.space.Scene;
+import de.maplesoft.renderengine.renderobject.gameobject.GameObject;
+import de.maplesoft.renderengine.renderobject.gameobject.defaults.FaceObject;
+import de.maplesoft.renderengine.space.scene.Scene3D;
 import de.maplesoft.renderengine.swing.RenderFrame;
 
 public class Main {
@@ -12,13 +12,13 @@ public class Main {
 
         frame.setVisible(true);
 
-        Scene scene = new Scene();
+        Scene3D scene3D = new Scene3D();
 
         GameObject gameObject = new FaceObject();
 
-        scene.add(gameObject);
+        scene3D.add(gameObject);
 
-        frame.loadScene(scene);
+        frame.loadScene(scene3D);
 
         return frame;
     }
